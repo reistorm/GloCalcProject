@@ -32,7 +32,12 @@ const appData = {
     init: function () {
         appData.addTitle()
         appData.getSlider();
-        startBtn.addEventListener('click', appData.start)
+        startBtn.addEventListener('click', () => {
+            appData.start()
+            const rollbackPercent = +appData.getRollback();
+            appData.totalCountWithRollback = appData.fullPrice - (appData.fullPrice * (rollbackPercent / 100))
+            appData.showResult();
+        })
         buttonPlus.addEventListener('click', appData.addScreenBlock)
         appData.attachEventListeners();
         appData.checkFields();
@@ -123,7 +128,7 @@ const appData = {
     },
     addPrices: function () {
         let totalScreenCount = 0
-        appData.screens.forEach(function(screen) {
+        appData.screens.forEach(function (screen) {
             totalScreenCount += screen.count
         })
         appData.totalScreenCount = totalScreenCount
@@ -149,8 +154,8 @@ const appData = {
             const value = inputRange.value
             appData.rollback = value
             span.textContent = value + '%';
-            appData.addPrices();
-            appData.showResult();
+            // appData.addPrices();
+            // appData.showResult();
         })
     },
     getRollback: function () {
