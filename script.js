@@ -164,7 +164,3 @@ const appData = {
 }
 
 appData.init();
-
-
-
-
