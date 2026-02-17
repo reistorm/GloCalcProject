@@ -13,8 +13,12 @@ const totalCount = document.getElementsByClassName('total-input')[1]
 const totalCountOther = document.getElementsByClassName('total-input')[2]
 const fullTotalCount = document.getElementsByClassName('total-input')[3]
 const totalCountRollback = document.getElementsByClassName('total-input')[4]
-
+const inputCMS = document.getElementById('cms-open')
+const hiddenCmsVariants = document.querySelector('.main-controls__item.hidden-cms-variants')
 let screens = document.querySelectorAll('.screen')
+const selectCMS = document.getElementById('cms-select')
+const otherInputWrapper = hiddenCmsVariants.querySelector('.main-controls__input'); // блок с input
+const otherInput = document.getElementById('cms-other-input');
 
 const appData = {
     title: '',
@@ -44,6 +48,21 @@ const appData = {
         document.getElementById('reset').addEventListener('click', () => {
             this.unlockInputsAndSelects();
             this.reset(false);
+        });
+        inputCMS.addEventListener('change', (e) => {
+            const check = e.target
+            if (check.checked) {
+                hiddenCmsVariants.style.display = 'flex'
+            } else {
+                hiddenCmsVariants.style.display = 'none'
+            }
+        })
+        selectCMS.addEventListener('change', () => {
+            if (selectCMS.value === 'other') {
+                otherInputWrapper.style.display = 'flex';
+            } else {
+                otherInputWrapper.style.display = 'none';
+            }
         });
     },
     addTitle: function () {
@@ -172,13 +191,16 @@ const appData = {
         for (let screen of this.screens) {
             this.screenPrice = this.screens.reduce((sum, screen) => sum + (+screen.price), 0)
         }
+       
         for (let key in this.servicesNumber) {
             this.servicePricesNumber += this.servicesNumber[key]
         }
+        
         for (let key in this.servicesPercent) {
             this.servicePricesPercent += this.screenPrice * (this.servicesPercent[key] / 100)
         }
         this.fullPrice = this.screenPrice + this.servicePricesPercent + this.servicePricesNumber
+
         const rollbackValue = +this.getRollback();
         this.totalCountWithRollback = this.fullPrice - (this.fullPrice * (rollbackValue / 100))
     },
